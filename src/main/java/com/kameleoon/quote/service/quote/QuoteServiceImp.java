@@ -63,7 +63,7 @@ public class QuoteServiceImp implements QuoteService {
 //        if (Objects.isNull(authUser))
 //            throw new IllegalArgumentException("Голосовать могут только авторизованные пользователи");
 //        Integer user_id = authUser.getUser().getId();
-        int user_id = new Random().nextInt(1, 3);
+        int user_id = new Random().nextInt(1, 10);
         like = new Random().nextBoolean();
         Quote quote = quoteRepository.getExisted(id);
         List<Vote> votes = quote.getVotes();
