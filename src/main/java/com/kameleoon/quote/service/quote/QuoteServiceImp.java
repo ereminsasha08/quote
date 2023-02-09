@@ -63,23 +63,26 @@ public class QuoteServiceImp implements QuoteService {
 //        if (Objects.isNull(authUser))
 //            throw new IllegalArgumentException("Голосовать могут только авторизованные пользователи");
 //        Integer user_id = authUser.getUser().getId();
-        int user_id = new Random().nextInt(1, 10);
+        int user_id = new Random().nextInt(1, 3);
         like = new Random().nextBoolean();
         Quote quote = quoteRepository.getExisted(id);
         List<Vote> votes = quote.getVotes();
         int score = quote.getScore();
         Optional<Vote> pastVote = votes.stream().filter(vote -> vote.getUserId() == user_id).findFirst();
-        if (pastVote.isPresent() && pastVote.get().isVoteValue() == like)
-            return;
+        Vote newVote = new Vote(quote, user_id, like);
+        if (pastVote.isPresent() && pastVote.get().isVoteValue() == like) {
+            votes.remove(pastVote.get());
+            score = !like? score + 1 : score - 1;
+        }
         else if (pastVote.isPresent()) {
             votes.remove(pastVote.get());
             score = like ? score + 2 : score - 2;
+            votes.add(newVote);
         } else {
             score = like ? score + 1 : score - 1;
+            votes.add(newVote);
         }
         quote.setScore(score);
-        Vote newVote = new Vote(quote, user_id, like);
-        votes.add(newVote);
         log.info("Update votes {}", quote);
     }
 
