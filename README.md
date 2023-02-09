@@ -1,5 +1,5 @@
 ## Test task. Launch and API
-1. To run the project, you need to fork the repository, build the jar, build image with docker, and run container. AWS IP:
+1. To run the project, you need to fork the repository, build the jar, build image with docker, and run container. 
 2. Available endpoints
 ### User
 - POST api/users - user creation, required fields for the request body 
