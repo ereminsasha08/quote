@@ -29,14 +29,17 @@ public class UserServiceImp implements UserService{
 
     @Override
     public User save(UserTo userTo) {
-        log.info("register {}", userTo);
+
         checkNew(userTo);
         User newFromTo = UserUtil.createNewFromTo(userTo);
+        log.info("register {}", userTo);
         return userRepository.save(UserUtil.prepareToSave(newFromTo));
     }
 
     @Override
     public User findByName(String name) {
-        return userRepository.findByName(name);
+        User byName = userRepository.findByName(name);
+        log.info("Find user by name {}", name);
+        return byName;
     }
 }

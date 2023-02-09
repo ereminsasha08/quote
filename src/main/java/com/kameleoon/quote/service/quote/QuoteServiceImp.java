@@ -40,6 +40,7 @@ public class QuoteServiceImp implements QuoteService {
     @Override
     public QuoteTo getQuoteWithStatistic(Integer id) {
         Quote existed = quoteRepository.getExisted(id);
+        log.info("Get quote {}", existed);
         return QuoteUtil.quoteWithStatistic(existed);
     }
 
@@ -52,6 +53,7 @@ public class QuoteServiceImp implements QuoteService {
         else user = userService.findByName("Anonymous");
         Quote newFromTo = QuoteUtil.createNewFromTo(quoteTo, user);
         Quote save = quoteRepository.save(newFromTo);
+        log.info("Save quote {}", save);
         return QuoteUtil.quoteWithoutStatistic(save);
     }
 
@@ -63,9 +65,9 @@ public class QuoteServiceImp implements QuoteService {
 //        Integer user_id = authUser.getUser().getId();
         int user_id = new Random().nextInt(1, 10);
         like = new Random().nextBoolean();
-        Quote existed = quoteRepository.getExisted(id);
-        List<Vote> votes = existed.getVotes();
-        int score = existed.getScore();
+        Quote quote = quoteRepository.getExisted(id);
+        List<Vote> votes = quote.getVotes();
+        int score = quote.getScore();
         Optional<Vote> pastVote = votes.stream().filter(vote -> vote.getUserId() == user_id).findFirst();
         if (pastVote.isPresent() && pastVote.get().isVoteValue() == like)
             return;
@@ -75,15 +77,17 @@ public class QuoteServiceImp implements QuoteService {
         } else {
             score = like ? score + 1 : score - 1;
         }
-        existed.setScore(score);
-        Vote newVote = new Vote(existed, user_id, like);
+        quote.setScore(score);
+        Vote newVote = new Vote(quote, user_id, like);
         votes.add(newVote);
+        log.info("Update votes {}", quote);
     }
 
     @Override
     @Transactional
     public void delete(Integer id) {
         quoteRepository.deleteById(id);
+        log.info("Delete quote with id {}", id);
     }
 
     @Override
@@ -92,6 +96,7 @@ public class QuoteServiceImp implements QuoteService {
         Quote modify = quoteRepository.getExisted(id);
         modify.setAuthor(quoteTo.getAuthor());
         modify.setContent(quoteTo.getContent());
+        log.info("Modify quote {}", modify);
         return QuoteUtil.quoteWithoutStatistic(modify);
     }
 }
