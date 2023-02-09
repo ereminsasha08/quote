@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface QuoteService {
-    List<QuoteTo> getTenTopQuotes();
+    List<QuoteTo> getTopQuotes();
 
     QuoteTo getQuoteWithStatistic(Integer id);
 

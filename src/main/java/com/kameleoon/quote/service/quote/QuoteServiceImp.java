@@ -28,9 +28,9 @@ public class QuoteServiceImp implements QuoteService {
 
 
     @Override
-    public List<QuoteTo> getTenTopQuotes() {
+    public List<QuoteTo> getTopQuotes() {
         log.info("Get top 10 quotes");
-        List<Quote> tenTopQuotes = quoteRepository.findTenTopQuotes(PageRequest.of(0, 10));
+        List<Quote> tenTopQuotes = quoteRepository.findTopQuotes(PageRequest.of(0, 10));
         return tenTopQuotes.stream()
                 .map(QuoteUtil::quoteWithoutStatistic)
                 .sorted(Comparator.comparing(QuoteTo::getScore).reversed())
@@ -52,8 +52,7 @@ public class QuoteServiceImp implements QuoteService {
         else user = userService.findByName("Anonymous");
         Quote newFromTo = QuoteUtil.createNewFromTo(quoteTo, user);
         Quote save = quoteRepository.save(newFromTo);
-        QuoteTo created = QuoteUtil.quoteWithoutStatistic(save);
-        return created;
+        return QuoteUtil.quoteWithoutStatistic(save);
     }
 
     @Override
@@ -62,7 +61,8 @@ public class QuoteServiceImp implements QuoteService {
 //        if (Objects.isNull(authUser))
 //            throw new IllegalArgumentException("Голосовать могут только авторизованные пользователи");
 //        Integer user_id = authUser.getUser().getId();
-        Integer user_id = new Random().nextInt(1, 4);
+        int user_id = new Random().nextInt(1, 10);
+        like = new Random().nextBoolean();
         Quote existed = quoteRepository.getExisted(id);
         List<Vote> votes = existed.getVotes();
         int score = existed.getScore();

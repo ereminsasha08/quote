@@ -12,7 +12,7 @@ public interface QuoteDataJpaRepository extends QuoteRepository {
     @Override
     @EntityGraph(attributePaths = ("user"))
     @Query("SELECT q from Quote q")
-    List<Quote> findTenTopQuotes(Pageable pageable);
+    List<Quote> findTopQuotes(Pageable pageable);
 
     @Override
     @EntityGraph(attributePaths = {"user", "votes"})

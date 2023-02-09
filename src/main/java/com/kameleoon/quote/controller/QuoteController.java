@@ -22,8 +22,8 @@ public class QuoteController {
     private final QuoteService quoteService;
 
     @GetMapping
-    public List<QuoteTo> tenTopQuotes() {
-        return quoteService.getTenTopQuotes();
+    public List<QuoteTo> getTopQuotes() {
+        return quoteService.getTopQuotes();
     }
 
     @GetMapping("/{id}")

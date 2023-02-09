@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 @NoRepositoryBean
 public interface QuoteRepository extends BaseRepository<Quote> {
-    List<Quote> findTenTopQuotes(Pageable pageable);
+    List<Quote> findTopQuotes(Pageable pageable);
 
     Optional<Quote> findById(Integer id);
 
