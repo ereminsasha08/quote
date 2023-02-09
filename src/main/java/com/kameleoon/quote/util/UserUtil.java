@@ -2,12 +2,11 @@ package com.kameleoon.quote.util;
 
 import com.kameleoon.quote.domain.user.Role;
 import com.kameleoon.quote.domain.user.User;
-import com.kameleoon.quote.to.UserTo;
+import com.kameleoon.quote.to.user.UserTo;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class UserUtil {
-
     public static User createNewFromTo(UserTo userTo) {
         return new User(null, userTo.getName(), userTo.getEmail().toLowerCase(), userTo.getPassword(), Role.USER);
     }

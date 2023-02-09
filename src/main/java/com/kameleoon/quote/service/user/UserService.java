@@ -1,7 +1,7 @@
 package com.kameleoon.quote.service.user;
 
 import com.kameleoon.quote.domain.user.User;
-import com.kameleoon.quote.to.UserTo;
+import com.kameleoon.quote.to.user.UserTo;
 
 import java.util.Optional;
 
@@ -10,4 +10,6 @@ public interface UserService {
 
 
     User save(UserTo userTo);
+
+    User findByName(String name);
 }

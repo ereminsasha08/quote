@@ -3,6 +3,7 @@ package com.kameleoon.quote.domain.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kameleoon.quote.domain.abstracts.HasIdAndEmail;
 import com.kameleoon.quote.domain.abstracts.NamedEntity;
+import com.kameleoon.quote.domain.quote.Quote;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,6 @@ public class User extends NamedEntity implements HasIdAndEmail, Serializable {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(max = 256)
-    // https://stackoverflow.com/a/12505165/548473
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -59,6 +59,9 @@ public class User extends NamedEntity implements HasIdAndEmail, Serializable {
     @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
+    @OneToMany(fetch = FetchType.LAZY)
+    @Column(name = "quote_id")
+    private List<Quote> quote;
 
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);

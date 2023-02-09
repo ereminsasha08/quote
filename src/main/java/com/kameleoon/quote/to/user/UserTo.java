@@ -1,6 +1,7 @@
-package com.kameleoon.quote.to;
+package com.kameleoon.quote.to.user;
 
 import com.kameleoon.quote.domain.abstracts.HasIdAndEmail;
+import com.kameleoon.quote.to.NamedTo;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
