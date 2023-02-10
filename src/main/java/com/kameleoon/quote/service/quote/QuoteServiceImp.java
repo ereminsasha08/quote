@@ -52,9 +52,9 @@ public class QuoteServiceImp implements QuoteService {
             user = authUser.getUser();
         else user = userService.findByName("Anonymous");
         Quote newFromTo = QuoteUtil.createNewFromTo(quoteTo, user);
-        Quote save = quoteRepository.save(newFromTo);
-        log.info("Save quote {}", save);
-        return QuoteUtil.quoteWithoutStatistic(save);
+        Quote saveQuote = quoteRepository.save(newFromTo);
+        log.info("Save quote {}", saveQuote);
+        return QuoteUtil.quoteWithoutStatistic(saveQuote);
     }
 
     @Override
@@ -63,16 +63,26 @@ public class QuoteServiceImp implements QuoteService {
 //        if (Objects.isNull(authUser))
 //            throw new IllegalArgumentException("Голосовать могут только авторизованные пользователи");
 //        Integer user_id = authUser.getUser().getId();
-        int user_id = new Random().nextInt(1, 10);
-        like = new Random().nextBoolean();
+        Random random = new Random();
+        int user_id = random.nextInt(1, 10);
+        like = random.nextBoolean();
+
         Quote quote = quoteRepository.getExisted(id);
         List<Vote> votes = quote.getVotes();
         int score = quote.getScore();
+
         Optional<Vote> pastVote = votes.stream().filter(vote -> vote.getUserId() == user_id).findFirst();
+
         Vote newVote = new Vote(quote, user_id, like);
+        score = calculationScore(like, votes, score, pastVote, newVote);
+        quote.setScore(score);
+        log.info("Update votes for quote {}", quote);
+    }
+
+    private static int calculationScore(Boolean like, List<Vote> votes, int score, Optional<Vote> pastVote, Vote newVote) {
         if (pastVote.isPresent() && pastVote.get().isVoteValue() == like) {
             votes.remove(pastVote.get());
-            score = !like? score + 1 : score - 1;
+            score = !like ? score + 1 : score - 1;
         }
         else if (pastVote.isPresent()) {
             votes.remove(pastVote.get());
@@ -82,8 +92,7 @@ public class QuoteServiceImp implements QuoteService {
             score = like ? score + 1 : score - 1;
             votes.add(newVote);
         }
-        quote.setScore(score);
-        log.info("Update votes {}", quote);
+        return score;
     }
 
     @Override
@@ -99,7 +108,7 @@ public class QuoteServiceImp implements QuoteService {
         Quote modify = quoteRepository.getExisted(id);
         modify.setAuthor(quoteTo.getAuthor());
         modify.setContent(quoteTo.getContent());
-        log.info("Modify quote {}", modify);
+        log.info("Update quote {}", modify);
         return QuoteUtil.quoteWithoutStatistic(modify);
     }
 }
